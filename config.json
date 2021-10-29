@@ -1,0 +1,12 @@
+{
+  "tumblr": {
+    "url": "your.tumblr.com",
+    "api_key": ""
+  },
+  "twitter": {
+    "consumer_key": "",
+    "consumer_secret": "",
+    "access_token_key": "",
+    "access_token_secret": ""
+  }
+}

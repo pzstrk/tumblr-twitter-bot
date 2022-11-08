@@ -5,10 +5,10 @@ The Python implementing of a bot posting photos from Tumblr to Twitter.
 ## Requirements
 
 - python3
-- pytumblr
-- python-twitter
-- tumblr oauth information
-- Twitter oath information
+- [tumblr/pytumblr](https://github.com/tumblr/pytumblr)
+- [bear/python-twitter](https://github.com/bear/python-twitter)
+- [tumblr oauth information](https://api.tumblr.com/console)
+- twitter oath information
 
 ## Getting started
 

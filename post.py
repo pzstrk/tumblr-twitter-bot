@@ -42,13 +42,13 @@ def extract_content(post):
     
     If post was posted from share button, you need to extract photo urls like: https://64.media.tumblr.com/.*?.jpg.
     """
-    if post['type'] == 'photo' in post:
+    if post['type'] == 'photo':
         photos = post["photos"]
         photo_urls = []
         for photo in photos:
             photo_urls.append(photo["original_size"]["url"])
         return photo_urls
-    elif post['type'] == 'video' in post:
+    elif post['type'] == 'video':
         video_url = post['video_url']
         video_id = twitter_client.UploadMediaChunked(
             media=video_url,

@@ -36,12 +36,7 @@ def get_post_from_tumblr(client):
 
     return response['posts'][0]
 
-def extract_content(post):
-    """
-    Get photo urls from tumblr post.
-    
-    If post was posted from share button, you need to extract photo urls like: https://64.media.tumblr.com/.*?.jpg.
-    """
+def extract_content(client, post):
     if post['type'] == 'photo':
         photos = post["photos"]
         photo_urls = []
@@ -50,7 +45,7 @@ def extract_content(post):
         return photo_urls
     elif post['type'] == 'video':
         video_url = post['video_url']
-        video_id = twitter_client.UploadMediaChunked(
+        video_id = client.UploadMediaChunked(
             media=video_url,
             media_category='tweet_video'
         )
@@ -64,6 +59,6 @@ def post_tweet(client, media):
     
 if __name__ == '__main__':
     post = get_post_from_tumblr(tumblr_client)
-    media = extract_content(post)
+    media = extract_content(twitter_client, post)
     post_tweet(twitter_client, media)
 

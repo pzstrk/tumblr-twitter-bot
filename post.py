@@ -21,10 +21,7 @@ twitter_client = twitter.Api(
 )
 
 def get_post():
-    """
-    Get a random tumblr post from all photo posts.
-    """
-    URL = API_BASE + "posts/photo?api_key=" + API_KEY
+    URL = API_BASE + "posts?api_key=" + API_KEY
 
     meta_response = requests.get(URL + "&limit=1")
     meta_json = meta_response.json()
@@ -39,30 +36,34 @@ def get_post():
     
     return post
 
-def extract_photo_urls(post):
+def extract_content(post):
     """
     Get photo urls from tumblr post.
     
     If post was posted from share button, you need to extract photo urls like: https://64.media.tumblr.com/.*?.jpg.
     """
-    urls = []
-    if "photos" in post:
+    if post['type'] == 'photo' in post:
         photos = post["photos"]
+        photo_urls = []
         for photo in photos:
-            urls.append(photo["original_size"]["url"])
-    else:
-        urls = re.findall(r'https://64.media.tumblr.com/.*?.jpg', post["body"])
+            photo_urls.append(photo["original_size"]["url"])
+        return photo_urls
+    elif post['type'] == 'video' in post:
+        video_url = post['video_url']
+        video_id = twitter_client.UploadMediaChunked(
+            media=video_url,
+            media_category='tweet_video'
+        )
+        time.sleep(10)
+        return video_id
+    #else:
+    #    media = re.findall(r'https://64.media.tumblr.com/.*?.jpg', post["body"])
+
+def tweet(media):
+    twitter_client.PostUpdate(status='', media=media)
     
-    return urls
-
-def tweet(urls):
-    """
-    Post tweet via twitter client.
-    """
-    twitter_client.PostUpdate(status="", media=urls)
-
 if __name__ == '__main__':
 
     post = get_post()
-    urls = extract_photo_urls(post)
-    tweet(urls)
+    media = extract_content(post)
+    tweet(media)

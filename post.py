@@ -3,15 +3,21 @@
 import json
 import random
 import re
+import os
 
-import requests
 import twitter
+import pytumblr
 
-config_file = open('config.json', 'r')
+config_dir = ''
+config_file = open(os.path.join(config_dir, 'config.json'), 'r')
 config = json.load(config_file)
 
-API_BASE = "https://api.tumblr.com/v2/blog/%s/" % config["tumblr"]["url"]
-API_KEY = config["tumblr"]["api_key"]
+tumblr_client = pytumblr.TumblrRestClient(
+    config['tumblr']['consumer_key'],
+    config['tumblr']['consumer_secret'],
+    config['tumblr']['oauth_token'],
+    config['tumblr']['oauth_secret']
+)
 
 twitter_client = twitter.Api(
     consumer_key = config["twitter"]["consumer_key"],
@@ -20,21 +26,15 @@ twitter_client = twitter.Api(
     access_token_secret = config["twitter"]["access_token_secret"],
 )
 
-def get_post():
-    URL = API_BASE + "posts?api_key=" + API_KEY
+def get_post_from_tumblr(client):
+    blog = config['tumblr']['url']
+    blog_info = client.blog_info(blog)
+    total_num = blog_info['blog']['posts']
 
-    meta_response = requests.get(URL + "&limit=1")
-    meta_json = meta_response.json()
-    photo_total_num = meta_json["response"]["blog"]["total_posts"]
+    index = random.randint(0, total_num - 1)
+    response = client.posts(blog, limit=1, offset=index-1)
 
-    index = random.randint(0, photo_total_num - 1)
-    print("%s/%s" % (index, photo_total_num))
-    
-    post_response = requests.get(URL + "&limit=1&offset=" + str(index - 1))
-    post_json = post_response.json()
-    post = post_json["response"]["posts"][0]
-    
-    return post
+    return response['posts'][0]
 
 def extract_content(post):
     """
@@ -59,11 +59,11 @@ def extract_content(post):
     #else:
     #    media = re.findall(r'https://64.media.tumblr.com/.*?.jpg', post["body"])
 
-def tweet(media):
-    twitter_client.PostUpdate(status='', media=media)
+def post_tweet(client, media):
+    client.PostUpdate(status='', media=media)
     
 if __name__ == '__main__':
-
-    post = get_post()
+    post = get_post_from_tumblr(tumblr_client)
     media = extract_content(post)
-    tweet(media)
+    post_tweet(twitter_client, media)
+

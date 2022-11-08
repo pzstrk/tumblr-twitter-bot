@@ -4,11 +4,11 @@ The Python implementing of a bot posting photos from Tumblr to Twitter.
 
 ## Requirements
 
-- Python3
-- requests
+- python3
+- pytumblr
 - python-twitter
-- Tumblr API Key
-- Twitter API Keys
+- tumblr oauth information
+- Twitter oath information
 
 ## Getting started
 
@@ -18,7 +18,10 @@ Configure your APIs in `config.json`.
 {
   "tumblr": {
     "url": "your.tumblr.com",
-    "api_key": ""
+    "consumer_key": "",
+	"consumer_secret": "",
+	"oauth_token": "",
+	"oauth_secret": ""
   },
   "twitter": {
     "consumer_key": "",
@@ -32,8 +35,7 @@ Configure your APIs in `config.json`.
 Install some python modules.
 
 ```sh
-pip3 install requests
-pip3 install python-twitter
+pip3 install -r requirements.txt
 ```
 
 Then, run `python3 post.py`.

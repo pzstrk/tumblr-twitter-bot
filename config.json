@@ -1,7 +1,10 @@
 {
   "tumblr": {
     "url": "your.tumblr.com",
-    "api_key": ""
+    "consumer_key": "",
+	"consumer_secret": "",
+	"oauth_token": "",
+	"oauth_secret": ""
   },
   "twitter": {
     "consumer_key": "",

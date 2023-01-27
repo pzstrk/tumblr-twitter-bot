@@ -4,6 +4,7 @@ import json
 import random
 import re
 import os
+import datetime
 
 import twitter
 import pytumblr
@@ -56,9 +57,20 @@ def extract_content(client, post):
 
 def post_tweet(client, media):
     client.PostUpdate(status='', media=media)
-    
+
+def log(message):
+    current_time = datetime.datetime.now()
+    formatted_time = current_time.strftime('%Y-%m-%d %H:%M:%S')
+    log_level = 'INFO'
+    print(f'[{formatted_time}] [{log_level}] {message}')
+
 if __name__ == '__main__':
     post = get_post_from_tumblr(tumblr_client)
     media = extract_content(twitter_client, post)
-    post_tweet(twitter_client, media)
+
+    try:
+        post_tweet(twitter_client, media)
+        log(f"{post['id']} successfully posted")
+    except:
+        log(f"{post['id']} post failed")
 

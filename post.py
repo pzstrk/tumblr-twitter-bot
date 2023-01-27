@@ -52,25 +52,20 @@ def extract_content(client, post):
         )
         time.sleep(10)
         return video_id
-    #else:
-    #    media = re.findall(r'https://64.media.tumblr.com/.*?.jpg', post["body"])
 
 def post_tweet(client, media):
     client.PostUpdate(status='', media=media)
 
-def log(message):
+def log(message, level = 'INFO'):
     current_time = datetime.datetime.now()
     formatted_time = current_time.strftime('%Y-%m-%d %H:%M:%S')
-    log_level = 'INFO'
-    print(f'[{formatted_time}] [{log_level}] {message}')
+    print(f'[{formatted_time}] [{level}] {message}')
 
 if __name__ == '__main__':
     post = get_post_from_tumblr(tumblr_client)
     media = extract_content(twitter_client, post)
-
     try:
         post_tweet(twitter_client, media)
         log(f"{post['id']} successfully posted")
-    except:
-        log(f"{post['id']} post failed")
-
+    except Exception as e:
+        log(f"{post['id']} post failed: {e}", 'ERROR')

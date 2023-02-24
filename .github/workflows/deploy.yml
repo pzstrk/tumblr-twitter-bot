@@ -16,8 +16,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Add Known Hosts
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-      - name: Setup rsync
-        run: sudo apt-get install rsync
       - name: Deploy with rsync
         run: rsync -avz --exclude 'config.json' ./ bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/apps/tumblr/
 

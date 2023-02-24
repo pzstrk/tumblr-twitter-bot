@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - develop
+name: deploy to production
+jobs:
+  deploy:
+    runs-on: ubuntsu-latest
+    steps:
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.WORKSPACE_SSH_PRIVATE_KEY }}
+          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+      - name: Add Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Deploy with rsync
+        run: rsync -avz --exclude 'config.json' ./ bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/apps/tumblr/
+

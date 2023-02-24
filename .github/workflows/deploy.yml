@@ -15,5 +15,5 @@ jobs:
       - name: Add Known Hosts
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Deploy with rsync
-        run: rsync -avz ... bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/apps/tumblr/
+        run: rsync -avz --exclude 'config.json' ./ bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/apps/tumblr/
 

@@ -34,7 +34,7 @@ if __name__ == '__main__':
     post = tumblr.fetch_one()
     media = extract_content(post)
     try:
-        twitter.post(media)
+        twitter.post("")
         log(f"{post['id']} successfully posted")
     except Exception as e:
         log(f"{post['id']} post failed: {e}", 'ERROR')

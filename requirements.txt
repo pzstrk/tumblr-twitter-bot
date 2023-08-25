@@ -1,2 +1,2 @@
 pytumblr
-python-twitter
+tweepy

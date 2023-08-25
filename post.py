@@ -32,9 +32,9 @@ def log(message, level = 'INFO'):
 
 if __name__ == '__main__':
     post = tumblr.fetch_one()
-    media = extract_media(post)
+    media_id = extract_media(post)
     try:
-        twitter.post("", media.media_id)
+        twitter.post("", media_id)
         log(f"{post['id']} successfully posted")
     except Exception as e:
         log(f"{post['id']} post failed: {e}", 'ERROR')

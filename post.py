@@ -8,13 +8,13 @@ from lib.config import config
 import lib.tumblr as tumblr
 import lib.twitter as twitter
 
-def extract_content(post):
+def extract_media(post):
     if post['type'] == 'photo':
         photos = post["photos"]
         photo_urls = []
         for photo in photos:
             photo_urls.append(photo["original_size"]["url"])
-        return photo_urls
+        return photo_urls[0]
 #    elif post['type'] == 'video':
 #        video_url = post['video_url']
 #        video_id = client.UploadMediaChunked(
@@ -32,9 +32,9 @@ def log(message, level = 'INFO'):
 
 if __name__ == '__main__':
     post = tumblr.fetch_one()
-    media = extract_content(post)
+    media = extract_media(post)
     try:
-        twitter.post("")
+        twitter.post("", media.media_id)
         log(f"{post['id']} successfully posted")
     except Exception as e:
         log(f"{post['id']} post failed: {e}", 'ERROR')

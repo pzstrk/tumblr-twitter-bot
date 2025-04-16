@@ -3,25 +3,28 @@
 import time
 import datetime
 
-from lib.config import config
 import lib.tumblr as tumblr
 import lib.twitter as twitter
 
 def extract_media(post):
-    if post['type'] == 'photo':
-        photos = post["photos"]
-        photo_urls = []
-        for photo in photos:
-            photo_urls.append(photo["original_size"]["url"])
-        return photo_urls[0]
-#    elif post['type'] == 'video':
-#        video_url = post['video_url']
-#        video_id = client.UploadMediaChunked(
-#            media=video_url,
-#            media_category='tweet_video'
-#        )
-#        time.sleep(10)
-#        return video_id
+    try:
+        if post['type'] == 'photo':
+            photos = post["photos"]
+            photo_urls = []
+            for photo in photos:
+                photo_urls.append(photo["original_size"]["url"])
+            return photo_urls[0]
+    #    elif post['type'] == 'video':
+    #        video_url = post['video_url']
+    #        video_id = client.UploadMediaChunked(
+    #            media=video_url,
+    #            media_category='tweet_video'
+    #        )
+    #        time.sleep(10)
+    #        return video_id
+    except Exception:
+        print("Failed to extract media from post")
+        raise
 
 def log(message, level = 'INFO'):
     timezone = datetime.timedelta(hours=9)

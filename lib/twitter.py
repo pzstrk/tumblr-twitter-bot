@@ -37,7 +37,7 @@ def upload(url):
             print("Failed to upload media")
             raise
     else:
-        printe("Unable to download image")
+        print("Unable to download image")
 
 def post(text, media_id):
     try:

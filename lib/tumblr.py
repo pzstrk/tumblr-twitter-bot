@@ -12,12 +12,16 @@ tumblr_client = pytumblr.TumblrRestClient(
 )
 
 def fetch_one():
-    blog = config['tumblr']['url']
-    blog_info = tumblr_client.blog_info(blog)
-    total_num = blog_info['blog']['posts']
+    try:
+        blog = config['tumblr']['url']
+        blog_info = tumblr_client.blog_info(blog)
+        total_num = blog_info['blog']['posts']
 
-    index = random.randint(0, total_num - 1)
-    response = tumblr_client.posts(blog, limit=1, offset=index-1)
+        index = random.randint(0, total_num - 1)
+        response = tumblr_client.posts(blog, limit=1, offset=index-1)
 
-    return response['posts'][0]
+        return response['posts'][0]
+    except Exception:
+        print("Failed to fetch post from Tumblr")
+        raise
 
